@@ -19,6 +19,18 @@ model Anime  {
   imagem    String
   genero    String 
   ano       String
-  nota      Float    
+  nota      Float  
+
+  userId    Int
+  user      User @relation(fields: [userId], references: [id])  
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        Int  @id @default(autoincrement())
+  email     String @unique
+  senha     String
+
+  animes    Anime[]
   createdAt DateTime @default(now())
 }
