@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AuthentService } from "../services/auth.services";
 
-const authentService = new AuthentService();
+const userServiceObj = new AuthentService();
 
 export class AuthentController{
 
@@ -11,7 +11,7 @@ export class AuthentController{
 
             const {email,senha} = req.body;
 
-            const user = await authentService.create(email, senha);
+            const user = await userServiceObj.create(email, senha);
 
             res.json(user);
 
@@ -35,7 +35,7 @@ export class AuthentController{
 
             const {email,senha} = req.body;
 
-            const retorno = await authentService.login(email, senha);
+            const retorno = await userServiceObj.login(email, senha);
 
             res.cookie("token", retorno.token,{
                 httpOnly: true,
