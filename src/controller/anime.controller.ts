@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AnimeService } from "../services/anime.service";
+import { AuthentPayload } from "../tipos/auth.payload";
 
 const AnimeServiceObj = new AnimeService();
 
@@ -13,29 +14,33 @@ export class AnimeController{
     async create(req: Request,res: Response)
     {
         const dados = req.body;
-        await AnimeServiceObj.create(dados);
+        const user = res.locals.user as AuthentPayload;
+        await AnimeServiceObj.create(dados,user.id);
         res.status(200).send();
     }
 
     async update(req:Request, res:Response)
     {
         const id = Number(req.params.id);
+        const user = res.locals.user as AuthentPayload;
         const dados = req.body;
-        await AnimeServiceObj.update(id,dados);
+        await AnimeServiceObj.update(id,user.id,dados);
         res.status(200).send();
     }
 
     async delete(req: Request, res: Response)
     {
         const id = Number(req.params.id);
-        await AnimeServiceObj.delete(id);
+        const user = res.locals.user as AuthentPayload;
+        await AnimeServiceObj.delete(id, user.id);
         res.status(200).send();
     }
 
     // Função que manda os dados de todos os filmes de volta pro frontend
     async listAll(req:Request, res:Response)
     {
-        const animes = await AnimeServiceObj.listAll();
+        const user = res.locals.user as AuthentPayload;
+        const animes = await AnimeServiceObj.listAll(user.id);
         res.status(200).json(animes);
     }
 
@@ -43,7 +48,8 @@ export class AnimeController{
     async searchId(req:Request, res:Response)
     {
         const id = Number(req.params.id);
-        const anime = await AnimeServiceObj.searchId(id);
+        const user = res.locals.user as AuthentPayload;
+        const anime = await AnimeServiceObj.searchId(id,user.id);
         res.status(200).json(anime);
     }
 

@@ -2,37 +2,61 @@ import { prisma } from "../prisma/client";
 
 export class AnimeService{
 
-    async create(dados: {titulo: string; imagem: string; genero: string; ano: string; nota: number})
+    async create(dados: {titulo: string; imagem: string; genero: string; ano: string; nota: number}, userId: number)
     {
         await prisma.anime.create({
-            data: dados,
+            data: {
+                ...dados,
+                userId,
+            }
         });
     }
 
-    async update(id:number, dados: {titulo: string; imagem: string; genero: string; ano: string; nota: number})
+    async update(id:number, userId: number,dados: {titulo: string; imagem: string; genero: string; ano: string; nota: number})
     {
         await prisma.anime.update({
-            where:{id},
+            where: {
+
+                id,
+                userId
+
+            },
+
             data: dados,
+            
         });
     }
 
-    async delete(id: number)
+    async delete(id: number, userId: number)
     {
         await prisma.anime.delete({
-            where: {id}
+            where: {
+
+                id,
+                userId
+
+            }
         });
     }
 
-    async listAll()
+    async listAll(userId: number)
     {
-        return await prisma.anime.findMany();
+        return await prisma.anime.findMany({
+            where: {
+                userId
+            }
+        });
     }
 
-    async searchId(id: number)
+    async searchId(id: number, userId: number)
     {
         return await prisma.anime.findUnique({
-            where: {id}
+            where: {
+
+                id,
+                userId
+
+            }
         });
     }
 

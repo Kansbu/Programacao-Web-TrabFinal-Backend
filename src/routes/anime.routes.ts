@@ -1,8 +1,12 @@
 import { AnimeController } from "../controller/anime.controller";
 import { Router } from "express";
+import { authentMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 const AnimeControllerObj = new AnimeController();
+
+// Intercepta as requisições antes de passarem pro controller
+router.use(authentMiddleware);
 
 //Funcionalidades para mexer no banco de dados
 router.post("/",AnimeControllerObj.create);
